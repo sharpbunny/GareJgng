@@ -22,8 +22,8 @@ namespace Gare
                 {
                     case "-f":
 
-                        lireJson(args[1]);
-                        stockeDansLaBase();
+                        dynamic stuff = lireJson(args[1]);
+                        stockeDansLaBase(stuff);
                         break;
                     default:
                         help();
@@ -37,46 +37,101 @@ namespace Gare
             }
         }
 
-        private static void stockeDansLaBase()
+        private static void stockeDansLaBase(dynamic stuff)
         {
             using (var db = new GareContest())
             {
-                var Gare = new Gare
+                //foreach (var item in stuff)
+                //{
+                //    Console.WriteLine(item.fields.ville);
+
+                //    string nomGare = item.fields.nom;
+                //    var Gare = new Gare
+                //    {
+
+                //        //Ligne = 984000,
+                //        nom = nomGare,
+                //        //    wgs84 = "2.3471 - 48.85312",
+
+                //        //    //cpVille = 75005,
+                //        //    //Villes = "Paris"
+
+                //    };
+
+                //    db.Gares.Add(Gare);
+                //    db.SaveChanges();
+                //}
+
+                foreach (var item in stuff)
                 {
-                    Ligne  = 984000,
-                    nom = "St-Michel-Notre-Dame",
-                    wgs84 = "2.3471 - 48.85312",
-                    
-                    //cpVille = 75005,
-                    //Villes = "Paris"
+                    //Console.WriteLine(item.fields.ville);
 
-                };
+                    //int nb;
+                    //bool controle = int.TryParse(item.fields.dept, out nb);
 
-                //db.gares.Add(gare);
-                db.SaveChanges();
+                    //Console.WriteLine(controle);
+                    //Console.WriteLine(nb);
+
+                    Nature nomNature = new Nature
+                    {
+                        nomNature = item.fields.nature,
+                    };
+                    db.Natures.Add(nomNature);
+                    db.SaveChanges();
+
+                    CodePostal cp = new CodePostal
+                    {
+                        CPVille = item.fields.cp,
+
+                    };
+                    db.CodePostals.Add(cp);
+                    db.SaveChanges();
+
+                    Ligne lignedetrain = new Ligne
+                    {
+                        CodeLigne = item.fields.code_ligne,
+                        
+                      
+
+                    };
+                    db.Lignes.Add(lignedetrain);
+                    db.SaveChanges();
+
+                    Ville VilleFrance = new Ville
+                    {
+                        nom = item.fields.ville,
+                        dept = item.fields.dept
+
+                    };
+                    db.Villes.Add(VilleFrance);
+                    db.SaveChanges();
+
+                    Gare garetrain = new Gare
+                    {
+                        nom = item.fields.nom,
+                        wgs84 = item.fields.wgs84
+                    };
+                    db.Gares.Add(garetrain);
+                    db.SaveChanges();
+                }
             }
-
-            //foreach (var garelignes in Gare)
-            // {
-
-            // }
-
         }
 
-        private static void lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
+        private static dynamic lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
         {
+            dynamic stuff;
             using (StreamReader r = new StreamReader(nomdufichier))
             {
                 string json = r.ReadToEnd();
-                dynamic stuff = JsonConvert.DeserializeObject(json);
-                foreach (var item in stuff)
-                {
-                    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12}",
-                     item.datasetid, item.recordid, item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
-                     item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
-                }
-
+                stuff = JsonConvert.DeserializeObject(json);
+                //foreach (var item in stuff)
+                //{
+                //    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12}",
+                //     item.datasetid, item.recordid, item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
+                //     item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
+                //}
             }
+            return stuff;
         }
 
 

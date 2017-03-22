@@ -62,7 +62,6 @@
     <Compile Include="Gare.cs" />
     <Compile Include="GareContest.cs" />
     <Compile Include="Ligne.cs" />
-    <Compile Include="Lignes.cs" />
     <Compile Include="Nature.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

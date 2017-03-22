@@ -13,7 +13,7 @@ namespace Gare
         public Gare()
         {
             Natures = new HashSet<Nature>();
-            Natures.Add(stuff.item.fields.nature);
+            //Natures.Add(stuff.item.fields.nature);
 
 
             Lignes = new HashSet<Ligne>();
