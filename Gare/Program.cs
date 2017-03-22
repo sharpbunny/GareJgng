@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Collections;
 
+
 namespace Gare
 {
     class Program
@@ -48,43 +49,53 @@ namespace Gare
                     {
                         nomNature = item.fields.nature,
                     };
+
+                    try
+                    {
+                        db.Natures.Add(nomNature);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                      
+                    }
                     db.Natures.Add(nomNature);
                     db.SaveChanges();
 
-                    CodePostal cp = new CodePostal
-                    {
-                        CPVille = item.fields.cp,
+                    //CodePostal cp = new CodePostal
+                    //{
+                    //    CPVille = item.fields.cp,
 
-                    };
-                    db.CodePostals.Add(cp);
-                    db.SaveChanges();
+                    //};
+                    //db.CodePostals.Add(cp);
+                    //db.SaveChanges();
 
-                    Ligne lignedetrain = new Ligne
-                    {
-                        CodeLigne = item.fields.code_ligne,
+                    //Ligne lignedetrain = new Ligne
+                    //{
+                    //    CodeLigne = item.fields.code_ligne,
 
-                    };
-                    db.Lignes.Add(lignedetrain);
-                    db.SaveChanges();
+                    //};
+                    //db.Lignes.Add(lignedetrain);
+                    //db.SaveChanges();
 
-                    Ville VilleFrance = new Ville
-                    {
-                        nom = item.fields.ville,
-                        dept = item.fields.dept
+                    //Ville VilleFrance = new Ville
+                    //{
+                    //    nom = item.fields.ville,
+                    //    dept = item.fields.dept
 
-                    };
-                    db.Villes.Add(VilleFrance);
-                    db.SaveChanges();
+                    //};
+                    //db.Villes.Add(VilleFrance);
+                    //db.SaveChanges();
 
-                    Gare garetrain = new Gare
-                    {
-                        nom = item.fields.nom,
-                        wgs84 = item.fields.wgs84
-                    };
-                    db.Gares.Add(garetrain);
-                    db.SaveChanges();
+                    //Gare garetrain = new Gare
+                    //{
+                    //    nom = item.fields.nom,
+                    //    wgs84 = item.fields.wgs84
+                    //};
+                    //db.Gares.Add(garetrain);
+                    //db.SaveChanges();
 
-                    Console.WriteLine(garetrain);
+                    //Console.WriteLine(garetrain);
                     Console.ReadLine();
                 }
             }
@@ -99,9 +110,9 @@ namespace Gare
                 stuff = JsonConvert.DeserializeObject(json);
                 foreach (var item in stuff)
                 {
-                    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} ",
-                     item.datasetid, item.recordid, item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
-                     item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
+                    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} ",
+                    item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
+                    item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
                 }
             }
             return stuff;
