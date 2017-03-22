@@ -38,7 +38,9 @@ namespace Gare
             }
         }
 
-        private static void stockeDansLaBase(dynamic stuff)
+
+
+        private static void natureToBdd(dynamic stuff)
         {
             using (var db = new GareContest())
             {
@@ -57,74 +59,154 @@ namespace Gare
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
-                      
+
                     }
-                    db.Natures.Add(nomNature);
+
                     db.SaveChanges();
-
-                    //CodePostal cp = new CodePostal
-                    //{
-                    //    CPVille = item.fields.cp,
-
-                    //};
-                    //db.CodePostals.Add(cp);
-                    //db.SaveChanges();
-
-                    //Ligne lignedetrain = new Ligne
-                    //{
-                    //    CodeLigne = item.fields.code_ligne,
-
-                    //};
-                    //db.Lignes.Add(lignedetrain);
-                    //db.SaveChanges();
-
-                    //Ville VilleFrance = new Ville
-                    //{
-                    //    nom = item.fields.ville,
-                    //    dept = item.fields.dept
-
-                    //};
-                    //db.Villes.Add(VilleFrance);
-                    //db.SaveChanges();
-
-                    //Gare garetrain = new Gare
-                    //{
-                    //    nom = item.fields.nom,
-                    //    wgs84 = item.fields.wgs84
-                    //};
-                    //db.Gares.Add(garetrain);
-                    //db.SaveChanges();
-
-                    //Console.WriteLine(garetrain);
-                    Console.ReadLine();
                 }
             }
         }
 
-        private static dynamic lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
+
+        private static void codePostaltoBdd(dynamic stuff)
         {
-            dynamic stuff;
-            using (StreamReader r = new StreamReader(nomdufichier))
+            using (var db = new GareContest())
             {
-                string json = r.ReadToEnd();
-                stuff = JsonConvert.DeserializeObject(json);
                 foreach (var item in stuff)
                 {
-                    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} ",
-                    item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
-                    item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
+                    CodePostal cp = new CodePostal
+                    {
+                        CPVille = item.fields.cp,
+
+                    };
+
+                    try
+                    {
+                        db.CodePostals.Add(cp);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
+
+                    db.SaveChanges();
                 }
             }
-            return stuff;
+        }
+
+        private static void LignedetrainToBdd(dynamic stuff)
+        {
+            using (var db = new GareContest())
+
+            {
+                foreach (var item in stuff)
+                {
+                    Ligne lignedetrain = new Ligne
+                    {
+                        CodeLigne = item.fields.code_ligne,
+
+                    };
+
+                    try
+                    {
+                        db.Lignes.Add(lignedetrain);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        private static void VilletoBdd(dynamic stuff)
+        {
+            using (var db = new GareContest())
+            {
+                foreach (var item in stuff )
+                {
+                    Ville VilleFrance = new Ville
+                    {
+                        nom = item.fields.ville,
+                        dept = item.fields.dept
+                    };
+                };
+
+                try
+                {
+                    db.Villes.Add(VilleFrance);
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+                db.SaveChanges();
+            }
+
         }
 
 
-
-        private static void help()
+        private static void GaretoBdd (dynamic stuff)
         {
-            Console.WriteLine("erreur argument");
+            using (var db = new GareContest())
+            {
+                foreach (var item in stuff)
+                {
+                    Gare GareTrain = new Gare
+                    {
+                        nom = item.fields.nom,
+                        wgs84 = item.fields.wgs84
+                    };
+
+                    try
+                    {
+                        db.Gares.Add(GareTrain);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
+                    db.SaveChanges();
+                }
+
+            }
+        }
+
+      
+      
+                }
+}
+        
+
+        private static dynamic lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
+{
+    dynamic stuff;
+    using (StreamReader r = new StreamReader(nomdufichier))
+    {
+        string json = r.ReadToEnd();
+        stuff = JsonConvert.DeserializeObject(json);
+        foreach (var item in stuff)
+        {
+            Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} ",
+            item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
+            item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
         }
     }
+    return stuff;
 }
+
+
+
+private static void help()
+{
+    Console.WriteLine("erreur argument");
+}
+    
+
 
 
