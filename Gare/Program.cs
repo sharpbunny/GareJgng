@@ -41,37 +41,9 @@ namespace Gare
         {
             using (var db = new GareContest())
             {
-                //foreach (var item in stuff)
-                //{
-                //    Console.WriteLine(item.fields.ville);
-
-                //    string nomGare = item.fields.nom;
-                //    var Gare = new Gare
-                //    {
-
-                //        //Ligne = 984000,
-                //        nom = nomGare,
-                //        //    wgs84 = "2.3471 - 48.85312",
-
-                //        //    //cpVille = 75005,
-                //        //    //Villes = "Paris"
-
-                //    };
-
-                //    db.Gares.Add(Gare);
-                //    db.SaveChanges();
-                //}
 
                 foreach (var item in stuff)
                 {
-                    //Console.WriteLine(item.fields.ville);
-
-                    //int nb;
-                    //bool controle = int.TryParse(item.fields.dept, out nb);
-
-                    //Console.WriteLine(controle);
-                    //Console.WriteLine(nb);
-
                     Nature nomNature = new Nature
                     {
                         nomNature = item.fields.nature,
@@ -90,8 +62,6 @@ namespace Gare
                     Ligne lignedetrain = new Ligne
                     {
                         CodeLigne = item.fields.code_ligne,
-                        
-                      
 
                     };
                     db.Lignes.Add(lignedetrain);
@@ -113,6 +83,9 @@ namespace Gare
                     };
                     db.Gares.Add(garetrain);
                     db.SaveChanges();
+
+                    Console.WriteLine(garetrain);
+                    Console.ReadLine();
                 }
             }
         }
@@ -124,12 +97,12 @@ namespace Gare
             {
                 string json = r.ReadToEnd();
                 stuff = JsonConvert.DeserializeObject(json);
-                //foreach (var item in stuff)
-                //{
-                //    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12}",
-                //     item.datasetid, item.recordid, item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
-                //     item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
-                //}
+                foreach (var item in stuff)
+                {
+                    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} ",
+                     item.datasetid, item.recordid, item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
+                     item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
+                }
             }
             return stuff;
         }
