@@ -19,7 +19,7 @@ namespace Gare
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CodeLigne { get; set; }
 
-        [StringLength(25)]
+        [StringLength(60)]
         public string Nom { get; set; }
 
         [StringLength(25)]

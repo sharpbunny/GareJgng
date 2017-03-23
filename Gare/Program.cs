@@ -7,6 +7,7 @@ using System.Web;
 using Newtonsoft.Json;
 using System.IO;
 using System.Collections;
+using System.Data.Entity.Validation;
 
 
 namespace Gare
@@ -25,9 +26,9 @@ namespace Gare
 
                         dynamic stuff = lireJson(args[1]);
                         natureToBdd(stuff);
+                        VilletoBdd(stuff);
                         codePostaltoBdd(stuff);
                         LignedetrainToBdd(stuff);
-                        VilletoBdd(stuff);
                         GaretoBdd(stuff);
                         break;
                     default:
@@ -56,13 +57,41 @@ namespace Gare
                     try
                     {
                         db.Natures.Add(nomNature);
-                    }
+                   } 
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
 
                     }
 
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
+        private static void VilletoBdd(dynamic stuff)
+        {
+            using (var db = new GareContest())
+            {
+                foreach (var item in stuff)
+                {
+                    Ville Villefrance = new Ville
+                    {
+                        nom = item.fields.ville,
+                        dept = item.fields.dept
+                    };
+
+
+                    try
+                    {
+                        db.Villes.Add(Villefrance);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
                     db.SaveChanges();
                 }
             }
@@ -123,35 +152,10 @@ namespace Gare
             }
         }
 
-        private static void VilletoBdd(dynamic stuff)
-        {
-            using (var db = new GareContest())
-            {
-                foreach (var item in stuff)
-                {
-                    Ville Villefrance = new Ville
-                    {
-                        nom = item.fields.ville,
-                        dept = item.fields.dept
-                    };
+        
 
 
-                    try
-                    {
-                        db.Villes.Add(Villefrance);
-                    }
-                    catch (Exception e)
-                    {
-
-                        Console.WriteLine(e.Message);
-                    }
-                    db.SaveChanges();
-                }
-            }
-        }
-
-
-        private static void GaretoBdd (dynamic stuff)
+        private static void GaretoBdd(dynamic stuff)
         {
             using (var db = new GareContest())
             {

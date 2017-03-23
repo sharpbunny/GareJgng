@@ -19,7 +19,7 @@ namespace Gare
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IDnature { get; set; }
 
-        [StringLength(25)]
+        [StringLength(60)]
         public string nomNature { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -18,7 +18,7 @@ namespace Gare
         [Key]
         public int IdVille { get; set; }
 
-        [StringLength(25)]
+        [StringLength(60)]
         public string nom { get; set; }
 
         public int? dept { get; set; }
