@@ -16,9 +16,9 @@ namespace Gare
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IDnature { get; set; }
 
+        [Required]
         [StringLength(60)]
         public string nomNature { get; set; }
 

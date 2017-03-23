@@ -20,14 +20,6 @@ namespace Gare
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<CodePostal>()
-                .Property(e => e.CPVille)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Gare>()
-                .Property(e => e.IdGare)
-                .IsUnicode(false);
-
             modelBuilder.Entity<Gare>()
                 .Property(e => e.nom)
                 .IsUnicode(false);
@@ -41,19 +33,7 @@ namespace Gare
                 .WithMany(e => e.Gares)
                 .Map(m => m.ToTable("dessert").MapLeftKey("IdGare").MapRightKey("IDnature"));
 
-            modelBuilder.Entity<Gare>()
-                .HasMany(e => e.Villes)
-                .WithMany(e => e.Gares)
-                .Map(m => m.ToTable("possede").MapLeftKey("IdGare").MapRightKey("IdVille"));
-
-            modelBuilder.Entity<Ligne>()
-                .Property(e => e.Nom)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Ligne>()
-                .Property(e => e.wgs84)
-                .IsUnicode(false);
-
+         
             modelBuilder.Entity<Ligne>()
                 .HasMany(e => e.Gares)
                 .WithMany(e => e.Lignes)
@@ -68,8 +48,14 @@ namespace Gare
                 .IsUnicode(false);
 
             modelBuilder.Entity<Ville>()
-                .Property(e => e.CPVille)
-                .IsUnicode(false);
+                .HasMany(e => e.CodePostals)
+                .WithRequired(e => e.Ville)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Ville>()
+                .HasMany(e => e.Gares)
+                .WithRequired(e => e.Ville)
+                .WillCascadeOnDelete(false);
         }
     }
 }

@@ -19,11 +19,6 @@ namespace Gare
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CodeLigne { get; set; }
 
-        [StringLength(60)]
-        public string Nom { get; set; }
-
-        [StringLength(25)]
-        public string wgs84 { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Gare> Gares { get; set; }

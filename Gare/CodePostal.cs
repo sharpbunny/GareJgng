@@ -9,17 +9,12 @@ namespace Gare
     [Table("CodePostal")]
     public partial class CodePostal
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CodePostal()
-        {
-            Villes = new HashSet<Ville>();
-        }
-
         [Key]
-        [StringLength(25)]
-        public string CPVille { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int CPVille { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ville> Villes { get; set; }
+        public int IdVille { get; set; }
+
+        public virtual Ville Ville { get; set; }
     }
 }
