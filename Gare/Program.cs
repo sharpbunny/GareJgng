@@ -24,18 +24,19 @@ namespace Gare
                     case "-f":
 
                         dynamic stuff = lireJson(args[1]);
-                        stockeDansLaBase(stuff);
+                        natureToBdd(stuff);
+                        codePostaltoBdd(stuff);
+                        LignedetrainToBdd(stuff);
+                        VilletoBdd(stuff);
+                        GaretoBdd(stuff);
                         break;
                     default:
-                        help();
+                        //help();
                         break;
                 }
 
             }
-            else
-            {
-                help();
-            }
+            
         }
 
 
@@ -126,27 +127,27 @@ namespace Gare
         {
             using (var db = new GareContest())
             {
-                foreach (var item in stuff )
+                foreach (var item in stuff)
                 {
-                    Ville VilleFrance = new Ville
+                    Ville Villefrance = new Ville
                     {
                         nom = item.fields.ville,
                         dept = item.fields.dept
                     };
-                };
 
-                try
-                {
-                    db.Villes.Add(VilleFrance);
-                }
-                catch (Exception e)
-                {
 
-                    Console.WriteLine(e.Message);
+                    try
+                    {
+                        db.Villes.Add(Villefrance);
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine(e.Message);
+                    }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
-
         }
 
 
@@ -177,35 +178,31 @@ namespace Gare
             }
         }
 
-      
-      
+        private static dynamic lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
+        {
+            dynamic stuff;
+            using (StreamReader r = new StreamReader(nomdufichier))
+            {
+                string json = r.ReadToEnd();
+                stuff = JsonConvert.DeserializeObject(json);
+                foreach (var item in stuff)
+                {
+                    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} ",
+                    item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
+                    item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
                 }
+            }
+            return stuff;
+        }
+    }
 }
         
 
-        private static dynamic lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
-{
-    dynamic stuff;
-    using (StreamReader r = new StreamReader(nomdufichier))
-    {
-        string json = r.ReadToEnd();
-        stuff = JsonConvert.DeserializeObject(json);
-        foreach (var item in stuff)
-        {
-            Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} ",
-            item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
-            item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
-        }
-    }
-    return stuff;
-}
+  
 
 
 
-private static void help()
-{
-    Console.WriteLine("erreur argument");
-}
+
     
 
 
