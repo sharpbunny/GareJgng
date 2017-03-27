@@ -10,7 +10,7 @@ namespace Gare
     public partial class CodePostal
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CPVille { get; set; }
 
         public int IdVille { get; set; }

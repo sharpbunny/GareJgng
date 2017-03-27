@@ -14,7 +14,7 @@ namespace Gare
 {
     class Program
     {
-
+        
         static void Main(string[] args)
         {
 
@@ -27,9 +27,9 @@ namespace Gare
                         dynamic stuff = lireJson(args[1]);
                         natureToBdd(stuff);
                         LignedetrainToBdd(stuff);
-                        codePostaltoBdd(stuff);
                         VilletoBdd(stuff);
                         GaretoBdd(stuff);
+                        CodePostaltoBdd(stuff);
 
                         break;
                     default:
@@ -115,46 +115,6 @@ namespace Gare
             }
         }
 
-        private static void codePostaltoBdd(dynamic stuff)
-        {
-            using (var db = new GareContest())
-            {
-                foreach (var item in stuff)
-                {
-                    int numCP = item.fields.cp;
-                    Console.WriteLine(numCP);
-                    var recherchedoublonCp = from cp in db.CodePostals
-                                             where cp.CPVille == numCP
-                                             select cp;
-                    CodePostal codePostal = recherchedoublonCp.FirstOrDefault();
-
-                    if (numCP == null)
-                    {
-                        CodePostal cp = new CodePostal
-                        {
-                            CPVille = item.fields.cp,
-
-                        };
-
-                        try
-                        {
-                            db.CodePostals.Add(cp);
-                        }
-                        catch (Exception e)
-                        {
-
-                            Console.WriteLine(e.Message);
-                        }
-
-                        db.SaveChanges();
-                    }
-
-
-                  
-                }
-            }
-        }
-
         private static void VilletoBdd(dynamic stuff)
         {
             using (var db = new GareContest())
@@ -188,6 +148,7 @@ namespace Gare
                         {
 
                             Console.WriteLine(e.Message);
+
                         }
                         db.SaveChanges();
                     }
@@ -202,10 +163,18 @@ namespace Gare
                 foreach (var item in stuff)
                 {
 
-                    // ici faire une requète pour trouver l'id de la ville
+                    string nomville = item.fields.ville;
+                    string coor = item.fields.wgs84[0].ToString() + "-" + item.fields.wgs84[1].ToString();
+
+                    var cherchernomVille = from v in db.Villes
+                                           where v.nom == nomville
+                                           select v;
+                    Ville ville = cherchernomVille.FirstOrDefault();
+
 
                     string nomGare = item.fields.nom;
                     Console.WriteLine(nomGare);
+                    
                     var chercherNomGare = from v in db.Gares
                                           where v.nom == nomGare
                                           select v;
@@ -216,29 +185,90 @@ namespace Gare
 
                         Gare GareTrain = new Gare
                         {
-                            nom = item.fields.nom,
-                            wgs84 = item.fields.wgs84[0].ToString() + "-" + item.fields.wgs84[1].ToString(),
+                           
+                            nom = nomGare,
+                            wgs84 = coor,
+                            IdVille = ville.IdVille
                            
                         };
+                        //GareTrain.IdVille = ville.IdVille;
+                        Console.WriteLine(coor);
+                        Console.WriteLine(" VILLE :"+ville.IdVille);
+                        Console.ReadLine();
 
-                        try
-                        {
+                       // try
+                        //{
                             db.Gares.Add(GareTrain);
-                        }
-                        catch (Exception e)
-                        {
+                            db.SaveChanges();
+                       // }
+                        //catch (Exception e)
+                        //{
 
-                            Console.WriteLine(e.Message);
-                        }
+                            //Console.WriteLine(e.Message);
+                       // }
 
                     }
 
-                    db.SaveChanges();
                 }
 
 
             }
         }
+
+        private static void CodePostaltoBdd(dynamic stuff)
+        {
+            using (var db = new GareContest())
+            {
+                var query = from v in db.Villes
+                            select v.CodePostals;
+
+                foreach (var item in stuff)
+                {
+
+                    string nomville = item.fields.ville;
+                    int numCP = item.fields.cp;    
+                    Console.WriteLine(nomville + " " + numCP);
+                    var cherchernomVille = from v in db.Villes
+                                           where v.nom == nomville
+                                           select v;
+                    Ville ville = cherchernomVille.FirstOrDefault();
+
+                    var recherchedoublonCp = from cp in db.CodePostals
+                                             where cp.CPVille== numCP
+                                             select cp.CPVille;
+                    foreach (var truc in recherchedoublonCp)
+                    {
+                        Console.WriteLine(truc);
+                        Console.WriteLine(truc);
+                    }
+
+                    Console.ReadLine();
+
+                  int? codePostal = recherchedoublonCp.FirstOrDefault();
+
+                    if (codePostal == null)
+                    {
+                        CodePostal cp = new CodePostal
+                        {
+                            CPVille = item.fields.cp,
+                           // IdVille = ville.IdVille
+
+                        };
+
+                        try
+                        {
+                            db.CodePostals.Add(cp);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
 
 
         private static dynamic lireJson(string nomdufichier) //fonction permettant de lire le fichier Json
@@ -250,7 +280,7 @@ namespace Gare
                 stuff = JsonConvert.DeserializeObject(json);
                 foreach (var item in stuff)
                 {
-                    //    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8} ",
+                    //    Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7} {8}",
                     //    item.fields.ville, item.fields.wgs84, item.fields.nature, item.fields.code_ligne,
                     //    item.fields.dept, item.fields.nom, item.fields.latitude_wgs84, item.fields.longitude_wgs84, item.fields.cp);
                 }

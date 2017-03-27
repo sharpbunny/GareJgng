@@ -17,7 +17,7 @@ namespace Gare
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IdGare { get; set; }
 
         [Required]
